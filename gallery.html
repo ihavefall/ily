@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museum of us</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 35px;
+    }
+
+    .memory {
+      background: #e5ebe0;
+      border: 1px solid #d6e0d2;
+      overflow: hidden;
+      transition: transform .25s ease;
+    }
+
+    .memory:hover {
+      transform: translateY(-5px);
+    }
+
+    .memory img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    .memory p {
+      padding: 13px;
+      margin: 0;
+      background: #fffef9;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem;
+    }
+
+    .photo-viewer {
+      position: fixed;
+      inset: 0;
+      background: #17271fee;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      z-index: 99;
+      cursor: zoom-out;
+    }
+
+    .photo-viewer.open {
+      display: flex;
+    }
+
+    .photo-viewer img {
+      max-width: 95%;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    @media (max-width: 650px) {
+      .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">for you.</span></a>
+    <div class="nav-links">
+      <a href="gallery.html">memories</a>
+      <a href="music.html">soundtrack</a>
+      <a href="letter.html">a letter</a>
+      <a href="little-things.html">little things</a>
+    </div>
+  </nav>
+
+  <main class="page-wrap">
+    <p class="eyebrow">CHAPTER 01 · SOME OF OUR ARCHIVE</p>
+
+    <h1 class="page-title">
+      moments i'd<br><em>keep forever.</em>
+    </h1>
+
+    <p class="page-intro">
+      Some of my favorite moments with you hehehe
+    </p>
+
+    <section class="gallery">
+
+      <!-- PHOTO 1 -->
+      <article class="memory">
+        <img src="image/image1.jpeg"
+             onclick="openPhoto(this.src)">
+        <p>us from their perspective</p>
+      </article>
+
+      <!-- PHOTO 2 -->
+      <article class="memory">
+        <img src="image/image 2.jpeg"
+             alt="A little adventure"
+             onclick="openPhoto(this.src)">
+        <p>tribune date! :o</p>
+      </article>
+
+      <!-- PHOTO 3 -->
+      <article class="memory">
+        <img src="image/image3.jpeg"
+             alt="A moment with you"
+             onclick="openPhoto(this.src)">
+        <p>the most amazing night ever</p>
+      </article>
+
+      <!-- COPY AN ARTICLE BLOCK TO ADD MORE PHOTOS -->
+
+    </section>
+
+    <div class="page-bottom">
+      <a class="text-link" href="index.html">← back home</a>
+      <a class="button" href="music.html">our soundtrack </a>
+    </div>
+  </main>
+
+  <footer>I'm looking forward to make more memories with you! c: <span>♡</span></footer>
+
+  <!-- CLICK PHOTO TO VIEW LARGER -->
+  <div class="photo-viewer" id="photoViewer"
+       onclick="closePhoto()">
+    <img id="expandedPhoto" src="" alt="Expanded memory">
+  </div>
+
+  <script>
+    function openPhoto(src) {
+      document.getElementById('expandedPhoto').src = src;
+      document.getElementById('photoViewer').classList.add('open');
+    }
+
+    function closePhoto() {
+      document.getElementById('photoViewer').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') closePhoto();
+    });
+  </script>
+
+</body>
+</html>
