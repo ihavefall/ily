@@ -1,64 +1,787 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>if we had a soundtrack...</title><link rel="stylesheet" href="style.css"></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>if we had a soundtrack...</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* MUSIC PAGE */
+
+    .music-page {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .music-intro {
+      max-width: 600px;
+      margin-bottom: 45px;
+    }
+
+    .music-intro .page-title {
+      margin-bottom: 20px;
+    }
+
+    .music-intro .page-intro {
+      line-height: 1.9;
+    }
+
+    /* MAIN RECORD PLAYER */
+
+    .record-player {
+      background: #e7eee3;
+      border: 1px solid #d3dfce;
+      border-radius: 28px;
+      padding: 35px;
+      margin: 45px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+
+    .player-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #71836a;
+    }
+
+    .player-status {
+      font-size: 11px;
+      color: #71836a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #8ca783;
+      border-radius: 50%;
+    }
+
+    /* TURNTABLE */
+
+    .turntable {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 15px 0 30px;
+    }
+
+    .vinyl-disc {
+      width: min(100%, 340px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        repeating-radial-gradient(
+          circle,
+          #252b25 0px,
+          #252b25 2px,
+          #303730 3px,
+          #252b25 4px,
+          #252b25 7px
+        );
+      box-shadow:
+        0 18px 35px rgba(47, 62, 43, 0.18),
+        inset 0 0 0 7px #202620,
+        inset 0 0 0 8px #454d43;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: spin 4s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl-disc.playing {
+      animation-play-state: running;
+    }
+
+    .vinyl-disc::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .vinyl-label {
+      width: 32%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #c3d2b9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #334331;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      border: 5px solid #a9b99f;
+    }
+
+    .vinyl-label small {
+      font-size: 7px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .vinyl-label strong {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(10px, 3vw, 15px);
+      font-weight: 500;
+      margin: 4px 0;
+    }
+
+    .vinyl-hole {
+      width: 7px;
+      height: 7px;
+      background: #293128;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    /* TONEARM */
+
+    .tonearm {
+      position: absolute;
+      width: 125px;
+      height: 125px;
+      top: 0;
+      right: 5%;
+      z-index: 5;
+      transform-origin: 85% 15%;
+      transform: rotate(-28deg);
+      transition: transform 1s ease;
+      pointer-events: none;
+    }
+
+    .tonearm.playing {
+      transform: rotate(0deg);
+    }
+
+    .tonearm-base {
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #b7c5ad;
+      border: 5px solid #d9e3d3;
+      right: 0;
+      top: 0;
+      box-shadow: 0 3px 8px #0001;
+    }
+
+    .tonearm-stick {
+      position: absolute;
+      width: 7px;
+      height: 105px;
+      background: linear-gradient(
+        to right,
+        #a0a99a,
+        #e8eee2,
+        #899481
+      );
+      border-radius: 10px;
+      right: 14px;
+      top: 22px;
+      transform: rotate(-18deg);
+      transform-origin: top;
+    }
+
+    .tonearm-stick::after {
+      content: "";
+      position: absolute;
+      width: 17px;
+      height: 25px;
+      background: #a0ad96;
+      border-radius: 4px;
+      bottom: -7px;
+      left: -5px;
+    }
+
+    /* SONG INFO */
+
+    .now-playing {
+      text-align: center;
+      margin: 10px 0 25px;
+    }
+
+    .now-playing-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #82927a;
+      margin-bottom: 10px;
+    }
+
+    .now-playing h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 27px;
+      font-weight: 400;
+      color: #3b4c38;
+      margin: 0 0 8px;
+    }
+
+    .now-playing p {
+      font-size: 12px;
+      color: #71816a;
+      margin: 0;
+    }
+
+    /* PLAYER BUTTON */
+
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .control-button {
+      border: 1px solid #b9c9b0;
+      background: #f5f7f0;
+      color: #50634b;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 16px;
+    }
+
+    .control-button:hover {
+      background: #d4e0cc;
+      transform: scale(1.05);
+    }
+
+    .control-button.main {
+      width: 55px;
+      height: 55px;
+      background: #71876a;
+      color: white;
+      border: none;
+      font-size: 20px;
+    }
+
+    /* SONG LIST */
+
+    .track-list {
+      border-top: 1px solid #cbd8c5;
+    }
+
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 17px 10px;
+      border-bottom: 1px solid #cbd8c5;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .track:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .track.active {
+      background: rgba(255,255,255,0.48);
+    }
+
+    .track-number {
+      font-size: 10px;
+      color: #899985;
+      min-width: 20px;
+    }
+
+    .track-mini-disc {
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      background:
+        repeating-radial-gradient(
+          circle,
+          #293129 0px,
+          #293129 2px,
+          #414940 3px,
+          #293129 4px,
+          #293129 6px
+        );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .track-mini-disc span {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #c3d2b9;
+      display: block;
+    }
+
+    .track.active .track-mini-disc {
+      animation: spin 4s linear infinite;
+    }
+
+    .track-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-info strong {
+      display: block;
+      font-family: "Playfair Display", serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #40503c;
+      margin-bottom: 5px;
+    }
+
+    .track-info small {
+      font-size: 10px;
+      color: #85917d;
+    }
+
+    .track-play {
+      color: #81927a;
+      font-size: 15px;
+      padding: 0 8px;
+    }
+
+    /* NOTE */
+
+    .playlist-note {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      background: #f0f3eb;
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 30px;
+    }
+
+    .playlist-note > span {
+      color: #91a587;
+      font-size: 18px;
+    }
+
+    .playlist-note p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.9;
+      color: #7a8874;
+    }
+
+    .playlist-note strong {
+      color: #52664b;
+      font-family: "Playfair Display", serif;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    /* ANIMATION */
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+      .record-player {
+        padding: 22px 17px;
+        border-radius: 22px;
+      }
+
+      .vinyl-disc {
+        width: min(78vw, 300px);
+      }
+
+      .tonearm {
+        transform: scale(0.75) rotate(-28deg);
+        right: -5px;
+        top: -5px;
+      }
+
+      .tonearm.playing {
+        transform: scale(0.75) rotate(0deg);
+      }
+
+      .now-playing h2 {
+        font-size: 23px;
+      }
+
+      .track {
+        gap: 10px;
+      }
+
+      .track-info strong {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
 <body>
-<nav class="nav"><a class="brand" href="index.html">for you. </span></a><div class="nav-links"><a href="gallery.html">memories</a><a class="active" href="music.html">soundtrack</a><a href="letter.html">a letter</a><a href="little-things.html">little things</a></div></nav>
-<main class="page-wrap">
-  <p class="eyebrow">CHAPTER 02 · I KEEP YOU ON SOME SONGS</p><h1 class="page-title">if we had<br><em>a soundtrack.</em></h1>
-  <p class="page-intro">There are so much songs that reminds me of you, however if I should express my feelings towards you through songs, these songs would be it..</p>
-  
-<div class="playlist">
 
-  <!-- SONG 1 -->
-  <div class="track">
-    <span class="track-no">01</span>
-    <span class="vinyl">♫</span>
+<nav class="nav">
+  <a class="brand" href="index.html">for you.</a>
 
-    <div class="track-info">
-      <strong>Somethin' Stupid</strong>
-      <small>Frank Sinatra, Nancy Sinatra</small>
-    </div>
+  <div class="nav-links">
+    <a href="gallery.html">memories</a>
+    <a class="active" href="music.html">soundtrack</a>
+    <a href="letter.html">a letter</a>
+    <a href="little-things.html">little things</a>
+  </div>
+</nav>
 
-    <audio controls preload="metadata">
-      <source src="songs/Somethin' Stupid_spotdown.org.mp3" type="audio/mpeg">
-      Your browser does not support audio.
-    </audio>
+<main class="page-wrap music-page">
+
+  <div class="music-intro">
+    <p class="eyebrow">CHAPTER 02 · I KEEP YOU ON SOME SONGS</p>
+
+    <h1 class="page-title">
+      if we had<br>
+      <em>a soundtrack.</em>
+    </h1>
+
+    <p class="page-intro">
+      There are so many songs that remind me of you.
+      But if I had to express my feelings through music,
+      these would be the songs I'd choose.
+      A little collection of songs that somehow feel like us.
+    </p>
   </div>
 
-  <!-- SONG 2 -->
-  <div class="track">
-    <span class="track-no">02</span>
-    <span class="vinyl">♫</span>
+  <!-- RECORD PLAYER -->
 
-    <div class="track-info">
-      <strong>Second Nature</strong>
-      <small>Clairo</small>
+  <section class="record-player">
+
+    <div class="player-top">
+      <span class="player-label">a little record for you ♡</span>
+
+      <span class="player-status">
+        <span class="status-dot"></span>
+        <span id="statusText">READY TO PLAY</span>
+      </span>
     </div>
 
-    <audio controls preload="metadata">
-      <source src="songs/Second Nature_spotdown.org.mp3" type="audio/mpeg">
-      Your browser does not support audio.
-    </audio>
-  </div>
+    <!-- VINYL -->
 
-  <!-- SONG 3 -->
-  <div class="track">
-    <span class="track-no">03</span>
-    <span class="vinyl">♫</span>
+    <div class="turntable">
 
-    <div class="track-info">
-      <strong>If</strong>
-      <small>Bread</small>
+      <div class="vinyl-disc" id="vinyl">
+
+        <div class="vinyl-label">
+          <small>side a</small>
+          <strong>for us</strong>
+          <small>♡ · 2026</small>
+        </div>
+
+        <div class="vinyl-hole"></div>
+
+      </div>
+
+      <!-- TONEARM -->
+
+      <div class="tonearm" id="tonearm">
+        <div class="tonearm-base"></div>
+        <div class="tonearm-stick"></div>
+      </div>
+
     </div>
 
-    <audio controls preload="metadata">
-      <source src="songs/If_spotdown.org.mp3" type="audio/mpeg">
-      Your browser does not support audio.
-    </audio>
+    <!-- CURRENT SONG -->
+
+    <div class="now-playing">
+
+      <div class="now-playing-label">NOW PLAYING</div>
+
+      <h2 id="currentTitle">Somethin' Stupid</h2>
+
+      <p id="currentArtist">Frank Sinatra, Nancy Sinatra</p>
+
+    </div>
+
+    <!-- CONTROLS -->
+
+    <div class="player-controls">
+
+      <button class="control-button" id="prevButton" aria-label="Previous song">
+        ↶
+      </button>
+
+      <button class="control-button main" id="playButton" aria-label="Play">
+        ▶
+      </button>
+
+      <button class="control-button" id="nextButton" aria-label="Next song">
+        ↷
+      </button>
+
+    </div>
+
+    <!-- SONG LIST -->
+
+    <div class="track-list">
+
+      <div class="track active" data-index="0">
+
+        <span class="track-number">01</span>
+
+        <div class="track-mini-disc">
+          <span></span>
+        </div>
+
+        <div class="track-info">
+          <strong>Somethin' Stupid</strong>
+          <small>Frank Sinatra, Nancy Sinatra</small>
+        </div>
+
+        <span class="track-play">♫</span>
+
+      </div>
+
+      <div class="track" data-index="1">
+
+        <span class="track-number">02</span>
+
+        <div class="track-mini-disc">
+          <span></span>
+        </div>
+
+        <div class="track-info">
+          <strong>Second Nature</strong>
+          <small>Clairo</small>
+        </div>
+
+        <span class="track-play">♫</span>
+
+      </div>
+
+      <div class="track" data-index="2">
+
+        <span class="track-number">03</span>
+
+        <div class="track-mini-disc">
+          <span></span>
+        </div>
+
+        <div class="track-info">
+          <strong>If</strong>
+          <small>Bread</small>
+        </div>
+
+        <span class="track-play">♫</span>
+
+      </div>
+
+    </div>
+
+    <!-- HIDDEN AUDIO -->
+
+    <audio id="audioPlayer" preload="metadata"></audio>
+
+  </section>
+
+  <!-- LITTLE NOTE -->
+
+  <div class="playlist-note">
+
+    <span>✳</span>
+
+    <p>
+      <strong>a small reminder</strong><br>
+      Whenever one of these songs plays, I hope you remember
+      that somewhere, someone is thinking of you,
+      and that someone is me. ^-^
+    </p>
+
   </div>
 
-</div>
+  <div class="page-bottom">
+    <a class="text-link" href="gallery.html">← memories</a>
+    <a class="button" href="letter.html">next: a letter</a>
+  </div>
 
-  <div class="playlist-note"><span>✳</span><p><strong>a small reminder</strong><br>Whenever one of these songs plays, I hope you remember that somewhere, someone is thinking of you, and that someone is me. ^-^</p></div>
-  <div class="page-bottom"><a class="text-link" href="gallery.html">← memories</a><a class="button" href="letter.html">next: a letter</a></div>
-</main><footer>just my way to say I love you :p</span></footer></body></html>
+</main>
+
+<footer>just my way to say I love you :p</footer>
+
+<!-- PLAYER SCRIPT -->
+
+<script>
+
+  const songs = [
+    {
+      title: "Somethin' Stupid",
+      artist: "Frank Sinatra, Nancy Sinatra",
+      src: "songs/Somethin' Stupid_spotdown.org.mp3"
+    },
+    {
+      title: "Second Nature",
+      artist: "Clairo",
+      src: "songs/Second Nature_spotdown.org.mp3"
+    },
+    {
+      title: "If",
+      artist: "Bread",
+      src: "songs/If_spotdown.org.mp3"
+    }
+  ];
+
+  const audio = document.getElementById("audioPlayer");
+  const vinyl = document.getElementById("vinyl");
+  const tonearm = document.getElementById("tonearm");
+
+  const playButton = document.getElementById("playButton");
+  const prevButton = document.getElementById("prevButton");
+  const nextButton = document.getElementById("nextButton");
+
+  const currentTitle = document.getElementById("currentTitle");
+  const currentArtist = document.getElementById("currentArtist");
+  const statusText = document.getElementById("statusText");
+
+  const tracks = document.querySelectorAll(".track");
+
+  let currentIndex = 0;
+
+  function loadSong(index) {
+
+    currentIndex = index;
+
+    const song = songs[currentIndex];
+
+    audio.src = song.src;
+
+    currentTitle.textContent = song.title;
+    currentArtist.textContent = song.artist;
+
+    tracks.forEach((track, i) => {
+      track.classList.toggle("active", i === currentIndex);
+    });
+
+    playButton.textContent = "▶";
+
+    vinyl.classList.remove("playing");
+    tonearm.classList.remove("playing");
+
+    statusText.textContent = "READY TO PLAY";
+  }
+
+  function playSong() {
+
+    if (audio.paused) {
+
+      audio.play().catch(() => {
+        statusText.textContent = "CHECK YOUR SONG FILE";
+      });
+
+    } else {
+
+      audio.pause();
+
+    }
+
+  }
+
+  function updatePlayer() {
+
+    const isPlaying = !audio.paused;
+
+    vinyl.classList.toggle("playing", isPlaying);
+    tonearm.classList.toggle("playing", isPlaying);
+
+    playButton.textContent = isPlaying ? "Ⅱ" : "▶";
+
+    statusText.textContent = isPlaying
+      ? "NOW PLAYING ♡"
+      : "PAUSED";
+
+  }
+
+  function nextSong() {
+
+    currentIndex = (currentIndex + 1) % songs.length;
+
+    loadSong(currentIndex);
+
+    audio.play().catch(() => {
+      statusText.textContent = "CHECK YOUR SONG FILE";
+    });
+
+  }
+
+  function previousSong() {
+
+    currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+
+    loadSong(currentIndex);
+
+    audio.play().catch(() => {
+      statusText.textContent = "CHECK YOUR SONG FILE";
+    });
+
+  }
+
+  playButton.addEventListener("click", playSong);
+
+  nextButton.addEventListener("click", nextSong);
+
+  prevButton.addEventListener("click", previousSong);
+
+  tracks.forEach((track) => {
+
+    track.addEventListener("click", () => {
+
+      const index = Number(track.dataset.index);
+
+      loadSong(index);
+
+      audio.play().catch(() => {
+        statusText.textContent = "CHECK YOUR SONG FILE";
+      });
+
+    });
+
+  });
+
+  audio.addEventListener("play", updatePlayer);
+
+  audio.addEventListener("pause", updatePlayer);
+
+  audio.addEventListener("ended", nextSong);
+
+  loadSong(0);
+
+</script>
+
+</body>
+</html>
